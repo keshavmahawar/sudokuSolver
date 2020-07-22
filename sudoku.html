@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Sudoku solver</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link href="https://fonts.googleapis.com/css2?family=Chicle&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="sudoku.css">
+	</head>
+	<body>
+        <h1 class="heading text-center">Sudoku Solver</h1>
+        <div class="container">
+            <div class="game-side">
+                <div id="mainFrame">
+                </div>
+            </div>
+            <div class="controls">
+                <div id="alert"></div>
+                <label for="delay">Speed:</label><input type="range" min="0" max="2000" value="1000" class="slider" id="delay">
+                <button class="btn" id="solve">SOLVE PUZZLE</button>
+                <button class="btn" id="vSolve">VISUALIZE SOLVE</button>
+            </div>
+        </div>
+		<script src="sudoku.js"></script>
+	</body>
+</html>

@@ -1,0 +1,68 @@
+#mainFrame {
+    border: 3px solid #7c808b;
+    height: 500px;
+    width: 500px;
+    margin: 10px auto;
+}
+.game-side{
+    flex:2;
+}
+.controls{
+    flex: 1;
+}
+#gameFrame {
+    display: grid;
+    height: 100%;
+    grid-template-rows: repeat(9,1fr);
+    font-family: 'Roboto Mono', monospace;
+}
+#gameFrame .row {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+}
+#gameFrame .row > div {
+    border: 1px solid #dce0e7;
+    font-size: 1.5em;
+    text-align: center;
+    padding: 12px;
+}
+.text-center {
+    text-align: center;
+}
+.heading {
+    font-size: 60px;
+    font-family: "Chicle", cursive;
+    margin: 0px 0px;
+}
+.green{
+    color: green;
+}
+.yellow{
+    color: blue;
+}
+.red{
+    color: red;
+}
+.container{
+    display: flex;
+    width: 80%;
+    margin: 10px auto;
+    align-items: center;
+}
+#delay{
+    width: 100%;
+}
+.btn{
+    padding: 10px 20px;
+    color: white;
+    font-weight: 500;
+    font-size: 23px;
+    background-color: #269d70;
+    border-radius: 5px;
+    border: none;
+    margin: 10px 5px;
+}
+#alert{
+    font-size: 1.5em;
+    margin:10px;
+}
