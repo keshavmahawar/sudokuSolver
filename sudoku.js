@@ -3,26 +3,40 @@ class gameGrid {
 		this.mainFrame = frame;
 		this.alert = alertDiv;
 		this.sudoku = [
-			[0, 4, 0, 0, 0, 0, 1, 7, 9],
-			[0, 0, 2, 0, 0, 8, 0, 5, 4],
-			[0, 0, 6, 0, 0, 5, 0, 0, 8],
-			[0, 8, 0, 0, 7, 0, 9, 1, 0],
-			[0, 5, 0, 0, 9, 0, 0, 3, 0],
-			[0, 1, 9, 0, 6, 0, 0, 4, 0],
-			[3, 0, 0, 4, 0, 0, 7, 0, 0],
-			[5, 7, 0, 1, 0, 0, 2, 0, 0],
-			[9, 2, 8, 0, 0, 0, 0, 6, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
 		];
 		this.delay = 1000;
 		this.loadGameFrame();
 	}
 
+	setVisualizerAlert(txt) {
+		if (this.delay > 400) this.setAlert(txt);
+	}
+
 	setAlert(txt) {
-		if (this.delay > 500) this.alert.innerText = txt;
+		this.alert.innerText = txt;
+	}
+
+	sudokuInput() {
+		for (let i = 0; i < 9; i++) {
+			for (let j = 0; j < 9; j++) {
+				this.sudoku[i][j] = this.grid[i][j].getValue();
+			}
+		}
+        console.log(this.sudoku);
 	}
 
 	setDelay(delay) {
-		if (delay < 500) this.alert.innerText = "";
+		if (delay < 400) this.alert.innerText = "";
+
 		this.delay = delay;
 	}
 
@@ -48,10 +62,10 @@ class gameGrid {
 
 		this.mainFrame.innerText = "";
 		this.mainFrame.append(gameFrame);
-		this.initialLoad();
+		// this.loadSudoku();
 	}
 
-	initialLoad() {
+	loadSudoku() {
 		let arr = this.sudoku;
 		for (let i = 0; i < 9; i++) {
 			for (let j = 0; j < 9; j++) {
@@ -63,6 +77,7 @@ class gameGrid {
 	}
 
 	sudokuSolver() {
+        this.sudokuInput()
 		let arr = this.sudoku;
 		let row = [],
 			col = [],
@@ -108,28 +123,37 @@ class gameGrid {
 			}
 			for (let k = 1; k <= 9; k++) {
 				this.grid[i][j].append(k);
-				this.setAlert("Trying " + k + " in current cell");
+				this.setVisualizerAlert("Trying " + k + " in current cell");
 				this.grid[i][j].yellow();
+
 				await sleep();
 				if (row[i].includes(k)) {
 					this.grid[i][j].red();
-					this.setAlert(k + " Already in row, trying next");
+					this.setVisualizerAlert(k + " Already in row, trying next");
+
 					await sleep();
+
 					continue;
 				} else if (col[j].includes(k)) {
 					this.grid[i][j].red();
-					this.setAlert(k + " Already in column, trying next");
+					this.setVisualizerAlert(k + " Already in column, trying next");
+
 					await sleep();
+
 					continue;
 				} else if (selectBlock(i, j).includes(k)) {
 					this.grid[i][j].red();
-					this.setAlert(k + " Already in block, trying next");
+					this.setVisualizerAlert(k + " Already in block, trying next");
+
 					await sleep();
+
 					continue;
 				} else {
 					this.grid[i][j].green();
-					this.setAlert(k + " Seems ok, Moving forward");
+					this.setVisualizerAlert(k + " Seems ok, Moving forward");
+
 					await sleep();
+
 					row[i].push(k);
 					col[j].push(k);
 					selectBlock(i, j).push(k);
@@ -143,9 +167,12 @@ class gameGrid {
 					}
 				}
 			}
+
 			this.grid[i][j].red();
-			this.setAlert("Exhausted all combination, moving back");
+			this.setVisualizerAlert("Exhausted all combination, moving back");
+
 			await sleep();
+
 			this.grid[i][j].clear();
 			return false;
 		};
@@ -156,10 +183,12 @@ class gameGrid {
 			return block[i][j];
 		}
 
-        fill(0, 0, arr);
-        this.setAlert("Solved")
+		fill(0, 0, arr);
+		this.setVisualizerAlert("Solved");
 	}
+
 	sudokuSolverDirect() {
+        this.sudokuInput()
 		let arr = this.sudoku;
 		let row = [],
 			col = [],
@@ -221,35 +250,51 @@ class gameGrid {
 			return block[i][j];
 		}
 
-		fill(0, 0, arr);
-		this.initialLoad();
+		if (fill(0, 0, arr)) {
+			this.setAlert("Solved");
+			this.loadSudoku();
+		} else {
+			this.setAlert("No Solution");
+		}
 	}
 }
 
 class Tile {
 	constructor() {
 		this.node = document.createElement("div");
+		this.input = document.createElement("input");
+		this.input.setAttribute("type", "number");
+		this.input.className = "inputCell";
+		this.node.append(this.input);
 	}
 
 	append(no) {
-		this.node.innerHTML = "";
-		this.node.append(no);
+		this.input.value = no;
+	}
+
+	getValue() {
+		let no = this.input.value;
+		if (no == "") {
+			return 0;
+		} else {
+			return Number(no);
+		}
 	}
 
 	green() {
-		this.node.className = "green";
+		this.input.className = "inputCell green";
 	}
 
 	yellow() {
-		this.node.className = "yellow";
+		this.input.className = "inputCell yellow";
 	}
 
 	red() {
-		this.node.className = "red";
+		this.input.className = "inputCell red";
 	}
 
 	clear() {
-		this.node.innerText = "";
+		this.input.value = "";
 	}
 }
 
